@@ -1,0 +1,49 @@
+.article {
+    display: block;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.barCode {
+    font-family: 'LibreBarcode', cursive;
+    text-align: right;
+    margin-right: 5%;
+    font-size: 1.6em;
+}
+
+.imgContainer {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    max-width: 900px;
+}
+
+.imgDescription {
+    display: block;
+    font-size: 0.8em;
+    color: rgb(100, 100, 100);
+}
+
+@media (min-width:600px) {
+    .imgDescription {
+        font-size: 0.9em;
+    }
+}
+
+.imgCenter {
+    padding-left: auto;
+    padding-right: auto;
+    text-align: center;
+}
+
+.imgLeft {
+    padding-right: auto;
+    text-align: left;
+}
+
+.imgRight {
+    padding-left: auto;
+    text-align: right;
+}

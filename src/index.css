@@ -1,13 +1,77 @@
+@font-face {
+  font-family: Bullet3D;
+  src: url(fonts/Bullpen3D.ttf)
+}
+
+@font-face {
+  font-family: Girassol;
+  src: url(fonts/Girassol-Regular.ttf)
+}
+
+@font-face {
+  font-family: Merriweather;
+  src: url(fonts/merriweather/Merriweather-Regular.ttf)
+}
+
+@font-face {
+  font-family: LibreBarcode;
+  src: url(fonts/LibreBarcode39Extended-Regular.ttf)
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Merriweather', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h2, h3, h4, h5 {
+  font-family: 'Girassol', cursive;
+}
+p {
+  font-size: 1em;
+}
+
+h1 {
+  font-family: 'Bullet3D', serif;
+  font-size: 1.6rem;
+  margin: 0px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  display: block;
+}
+
+@media (min-width:400px) {
+  p {
+    font-size: 1.1em;
+  }
+  h1  {
+    font-size: 1.8rem;
+  }
+  h2 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (min-width:600px) {
+  p {
+    font-size: 1.2em;
+  }
+  h1  {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+img {
+  display: inline-block;
+  z-index: -1;
+  width: 100%;
+  float: none;
+  max-width: fit-content;
+  opacity: 90%;
 }
