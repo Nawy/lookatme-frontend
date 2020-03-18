@@ -1,14 +1,17 @@
 import React from 'react';
 import style from './Navbar.module.css'
+import { Link } from "react-router-dom";
 
 const titleName = "TITLE"
 
-function Navbar() {
+function Navbar({context}) {
   return (
     <div>
       <div className={style.navbar}>
           <span>
-            <h1 className={style.navbarTitle}>{titleName}</h1>
+            <Link to="/" className={style.indexLink}>
+              <h1 className={style.navbarTitle}>{titleName}</h1>
+            </Link>
           </span>
       </div>
       <div className={style.navbarLeftMenu}>

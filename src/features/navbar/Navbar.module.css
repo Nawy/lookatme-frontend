@@ -57,3 +57,23 @@
         visibility: visible;
     }
 }
+
+/* LINK SETTINGS */
+.indexLink {
+    text-decoration: none;
+}
+
+.indexLink:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.indexLink:active {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.indexLink:visited {
+    text-decoration: none;
+    cursor: pointer;
+}
