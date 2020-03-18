@@ -1,4 +1,9 @@
 @font-face {
+  font-family: BullpenItalic;
+  src: url(fonts/BullpenItalic.ttf)
+}
+
+@font-face {
   font-family: Bullet3D;
   src: url(fonts/Bullpen3D.ttf)
 }
@@ -74,4 +79,13 @@ img {
   float: none;
   max-width: fit-content;
   opacity: 90%;
+}
+
+button {
+  border: 0px;
+  font-size: 1.2rem;
+  font-family: 'BullpenItalic', serif;
+  display: block;
+  border-radius: 10px;
+  padding: 0.2rem 0.8rem 0.2rem 0.8rem;
 }

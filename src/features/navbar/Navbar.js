@@ -12,7 +12,9 @@ function Navbar() {
           </span>
       </div>
       <div className={style.navbarLeftMenu}>
-        back to top
+        <span className={style.navbarBackToTop} onClick={() => window.scrollTo(0, 0)}>
+          back to top
+          </span>
       </div>
       <div className={style.navbarRightMenu}>
         Test Text

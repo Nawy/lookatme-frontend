@@ -24,6 +24,16 @@
     visibility: hidden;
 }
 
+.navbarBackToTop:hover {
+    color:red;
+    cursor: pointer;
+}
+
+.navbarBackToTop:active {
+    color:blue;
+    cursor: n-resize;
+}
+
 @media (min-width:1130px) {
     .navbarLeftMenu {
         z-index: 1; 
