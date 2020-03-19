@@ -1,0 +1,19 @@
+.errorBlock {
+    display: block;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 1rem;
+    color: white;
+    padding: 10px;
+    background-image: repeating-linear-gradient(45deg, #B40404, #DF0101 15%, #FE2E2E 20%);
+}
+
+.goodColor {
+    display: block;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}

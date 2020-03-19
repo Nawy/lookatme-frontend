@@ -16,7 +16,6 @@
     font-size: 2rem;
     display: block;
     width: 100%;
-    resize: vertical;
     resize: none;
 }
 
@@ -27,4 +26,5 @@
     display: block;
     width: 100%;
     resize: none;
+    margin-bottom: 1rem;
 }

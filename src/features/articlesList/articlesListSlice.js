@@ -5,21 +5,25 @@ export const slice = createSlice({
   initialState: {
     list: [],
     isLoading: false,
-    isFailed: false
+    isFailed: false,
+    errorMessage: ""
   },
   reducers: {
     startedLoadArticles: state => {
         state.isLoading = true;
         state.isFailed = false;
+        state.errorMessage = ""
     },
     failedLoadArticles: state => {
         state.isLoading = false;
         state.isFailed = true;
+        state.errorMessage = "Connection problem... Can't load articles!"
     },
     receivedArticles: (state, action) => {
       state.list = action.payload;
       state.isLoading = false;
       state.isFailed = false;
+      state.errorMessage = ""
     },
   },
 });
@@ -35,7 +39,8 @@ export const listArticlesAsync = () => dispatch => {
       .then(res => res.json())
       .then(response => {
         dispatch(receivedArticles(response))
-      });
+      })
+      .catch((reason) => dispatch(failedLoadArticles()));
 };
 
 // The function below is called a selector and allows us to select a value from
