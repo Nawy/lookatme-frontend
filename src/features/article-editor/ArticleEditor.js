@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import style from './ArticleEditor.module.css'
 import findIndex from 'lodash/findIndex'
-import map from 'lodash/map'
+import map from 'lodash/map';
+import {paragraphsToText, textToParagraphs} from '../../utils/paragraphUtils'
 
 function ArticleEditor(props) {
 
@@ -20,7 +21,7 @@ function ArticleEditor(props) {
   function updateParagraph(values) {
     return map(
       [...values], (currentParagraph) => {
-        if (currentParagraph.id == selectedParagraph) {
+        if (currentParagraph.id === selectedParagraph) {
           return createNewParagraph(currentParagraph.id, paragraph, false)
         } else {
           return currentParagraph;
@@ -30,7 +31,7 @@ function ArticleEditor(props) {
   function switchEditorTo(editorId, values) {
     return map([...values], 
       (currentParagraph) => {
-        if (currentParagraph.id == editorId){
+        if (currentParagraph.id === editorId){
           setParagraph(currentParagraph.paragraph);
           return createNewParagraph(currentParagraph.id, currentParagraph.paragraph, true);
         } else {
@@ -43,9 +44,9 @@ function ArticleEditor(props) {
     return [...values, createNewParagraph(newId, "", true)]
   }
   function handlePress(event) {
-      if (event.key == 'Enter' && event.ctrlKey == true) {
+      if (event.key === 'Enter' && event.ctrlKey === true) {
         // not last
-        if (selectedParagraph != paragraphCount) {
+        if (selectedParagraph !== paragraphCount) {
           let selectNextId = selectedParagraph + 1;
           let resultValues = updateParagraph(paragraphsList);
           resultValues = switchEditorTo(selectNextId, resultValues);
@@ -85,7 +86,6 @@ function ArticleEditor(props) {
           adjustedHeight = Math.min(maxHeight, adjustedHeight);
         if ( adjustedHeight > text.clientHeight )
           text.style.height = adjustedHeight + "px";
-        console.info(adjustedHeight);
     }
   }
 
@@ -109,6 +109,16 @@ function ArticleEditor(props) {
       paragraph: text,
       editor: editor
     }
+  }
+
+  function handlerPostArticle() {
+    let resultValues = updateParagraph(paragraphsList);
+    setParagraphList(resultValues);
+
+    let result = paragraphsToText(resultValues);
+    console.info(result);
+    let back = textToParagraphs(result);
+    console.info(back);
   }
 
   const paragraphsView = paragraphsList.map(
@@ -145,7 +155,7 @@ function ArticleEditor(props) {
             rows="1"
             onChange={handlerHeaderChange}></textarea>
         {paragraphsView}
-        <button className={style.loginButton}>POST</button>
+        <button className={style.loginButton} onClick={handlerPostArticle}>POST</button>
     </div>
   );
 }

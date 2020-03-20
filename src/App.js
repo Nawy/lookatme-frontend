@@ -1,5 +1,5 @@
 import React from 'react';
-import ArticleList from './features/articleslist/ArticleList';
+import ArticleList from './features/articles-list/ArticleList';
 import Login from './features/login/Login';
 import Navbar from './features/navbar/Navbar';
 import ArticleEditor from './features/article-editor/ArticleEditor';

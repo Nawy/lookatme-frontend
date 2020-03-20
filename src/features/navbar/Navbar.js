@@ -20,7 +20,8 @@ function Navbar({context}) {
           </span>
       </div>
       <div className={style.navbarRightMenu}>
-        Test Text
+        <Link to="/editor" className={style.leftMenuLink}>Add</Link>
+        <Link to="/login" className={style.leftMenuLink}>Login</Link>
       </div>
     </div>
   );

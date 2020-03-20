@@ -12,8 +12,9 @@
 
 .articleHeaderTextarea {
     font-family: 'Girassol', cursive;
-    border: 0px;
+    border: none;
     font-size: 2rem;
+    overflow:hidden;
     display: block;
     width: 100%;
     resize: none;
@@ -21,10 +22,10 @@
 
 .articleContentTextarea {
     font-family: 'Merriweather', serif;
-    border: 0px;
+    border: none;
     font-size: 1.2em;
     display: block;
     width: 100%;
+    overflow:hidden;
     resize: none;
-    margin-bottom: 1rem;
 }

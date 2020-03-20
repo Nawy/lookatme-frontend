@@ -35,6 +35,8 @@ h2, h3, h4, h5 {
 }
 p {
   font-size: 1em;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 h1 {
@@ -51,6 +53,8 @@ h2 {
 @media (min-width:400px) {
   p {
     font-size: 1.1em;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
   h1  {
     font-size: 1.8rem;
@@ -102,4 +106,6 @@ button:active {
 
 textarea {
   outline: none;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
