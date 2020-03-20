@@ -145,7 +145,7 @@ function ArticleEditor(props) {
             rows="1"
             onChange={handlerHeaderChange}></textarea>
         {paragraphsView}
-        <button className={style.loginButton}>Publish</button>
+        <button className={style.loginButton}>POST</button>
     </div>
   );
 }

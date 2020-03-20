@@ -89,3 +89,17 @@ button {
   border-radius: 10px;
   padding: 0.2rem 0.8rem 0.2rem 0.8rem;
 }
+
+button:hover {
+  color:white;
+  background: linear-gradient(141deg, #585858, #848484);
+}
+
+button:active {
+  color:white;
+  background: linear-gradient(141deg, #848484, #585858);
+}
+
+textarea {
+  outline: none;
+}
