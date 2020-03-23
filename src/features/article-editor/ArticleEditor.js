@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import style from './ArticleEditor.module.css'
 import findIndex from 'lodash/findIndex'
 import map from 'lodash/map';
-import {paragraphsToText, textToParagraphs} from '../../utils/paragraphUtils'
+import {paragraphsToText, textToParagraphs, TEXT_TYPE, HEADER_TYPE, IMAGE_TYPE} from '../../utils/paragraphUtils'
 
 function ArticleEditor(props) {
 
@@ -14,7 +14,8 @@ function ArticleEditor(props) {
     {
       id: selectedParagraph,
       paragraph: paragraph,
-      editor: true
+      editor: true,
+      type: TEXT_TYPE
     }
   ]);
 
@@ -107,7 +108,8 @@ function ArticleEditor(props) {
     return {
       id: id,
       paragraph: text,
-      editor: editor
+      editor: editor,
+      type: TEXT_TYPE
     }
   }
 

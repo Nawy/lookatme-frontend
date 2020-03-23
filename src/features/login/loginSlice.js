@@ -1,28 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'universal-cookie';
+
+const TOKEN_AUTH_NAME = 'AUTH_TOKEN';
 
 export const slice = createSlice({
   name: 'user',
   initialState: {
-    sessionId: null,
+    authToken: null,
     isLoading: false,
     isFailed: false,
     errorMessage: ""
   },
   reducers: {
     startedLogin: state => {
-        state.sessionId = null;
-        state.isLoading = true;
-        state.isFailed = false;
-        state.errorMessage = ""
+      state.authToken = null;
+      state.isLoading = true;
+      state.isFailed = false;
+      state.errorMessage = ""
     },
     failedLogin: state => {
-        state.sessionId = null;
-        state.isLoading = false;
-        state.isFailed = true;
-        state.errorMessage = "Invalid credentials!"
+      state.authToken = null;
+      state.isLoading = false;
+      state.isFailed = true;
+      state.errorMessage = "Invalid credentials!"
     },
     receivedLogin: (state, action) => {
-      state.sessionId = action.payload;
+      state.authToken = action.payload;
+      state.isLoading = false;
+      state.isFailed = false;
+      state.errorMessage = ""
+    },
+    logoutReceived: (state, action) => {
+      state.authToken = null;
       state.isLoading = false;
       state.isFailed = false;
       state.errorMessage = ""
@@ -30,12 +39,10 @@ export const slice = createSlice({
   },
 });
 
-export const { startedLogin, failedLogin, receivedLogin } = slice.actions;
+export const { startedLogin, failedLogin, receivedLogin, logoutReceived } = slice.actions;
 
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
+const cookies = new Cookies();
+
 export const loginAsync = (login, password) => dispatch => {
     fetch('http://localhost:3000/api/login', { 
             method: 'POST', 
@@ -43,10 +50,31 @@ export const loginAsync = (login, password) => dispatch => {
       })
       .then(res => res.json())
       .then(response => {
-        dispatch(receivedLogin(response.sessionId))
+        cookies.set(TOKEN_AUTH_NAME, response.authToken, { path: '/'});
+        dispatch(receivedLogin(response.authToken));
       })
       .catch((reason) => dispatch(failedLogin()));
 };
+
+export const logoutAsync = (authToken) => dispatch => {
+  fetch('http://localhost:3000/api/logout', { 
+    method: 'POST', 
+    headers: {
+      "auth-token": authToken
+    }
+  })
+  .then(res=> {
+    cookies.remove(TOKEN_AUTH_NAME, { path: '/'});
+    dispatch(logoutReceived());
+  })
+  .catch((reason) => dispatch(failedLogin()));
+}
+
+export const loadTokenAuthCookies = () => dispatch => {
+  if (cookies.get(TOKEN_AUTH_NAME) != null) {
+    dispatch(receivedLogin(cookies.get(TOKEN_AUTH_NAME)))
+  }
+}
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
