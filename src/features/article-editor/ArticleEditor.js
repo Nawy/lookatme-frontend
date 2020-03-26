@@ -1,15 +1,23 @@
 import React, {useState} from 'react';
 import style from './ArticleEditor.module.css'
-import findIndex from 'lodash/findIndex'
+import FlexTextarea from '../flex-textarea/FlexTextarea';
 import map from 'lodash/map';
-import {paragraphsToText, textToParagraphs, TEXT_TYPE, HEADER_TYPE, IMAGE_TYPE} from '../../utils/paragraphUtils'
+import { selectUser } from './../login/loginSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { publishArticleAsync } from './articleEditorSlice';
+
+import {paragraphsToText, TEXT_TYPE, HEADER_TYPE, IMAGE_TYPE} from '../../utils/paragraphUtils';
+import {createNewParagraph} from '../../utils/paragraphEditorUtils';
 
 function ArticleEditor(props) {
 
-  const [header, setHeader] = useState("");
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  const [title, setTitle] = useState("");
+  const [paragraph, setParagraph] = useState("");
   const [paragraphCount, setParagraphCount] = useState(0);
   const [selectedParagraph, setSelectedParagraph] = useState(0);
-  const [paragraph, setParagraph] = useState("");
   const [paragraphsList, setParagraphList] = useState([
     {
       id: selectedParagraph,
@@ -19,45 +27,46 @@ function ArticleEditor(props) {
     }
   ]);
 
-  function updateParagraph(values) {
-    return map(
-      [...values], (currentParagraph) => {
-        if (currentParagraph.id === selectedParagraph) {
-          return createNewParagraph(currentParagraph.id, paragraph, false)
-        } else {
-          return currentParagraph;
-        }
-      });
+  function createNewEmptyParagraph(newId, values) {
+    return [...values, createNewParagraph(newId, "", true, TEXT_TYPE)];
   }
-  function switchEditorTo(editorId, values) {
-    return map([...values], 
-      (currentParagraph) => {
-        if (currentParagraph.id === editorId){
-          setParagraph(currentParagraph.paragraph);
-          return createNewParagraph(currentParagraph.id, currentParagraph.paragraph, true);
-        } else {
-          return createNewParagraph(currentParagraph.id, currentParagraph.paragraph, false);
-        }
+
+  function updateParagraph(values, newValue) {
+      return map(
+          [...values], (currentParagraph) => {
+          if (currentParagraph.id === selectedParagraph) {
+              return createNewParagraph(currentParagraph.id, newValue, false, TEXT_TYPE)
+          } else {
+              return currentParagraph;
+          }
       });
   }
 
-  function createNewEmptyParagraph(newId, values) {
-    return [...values, createNewParagraph(newId, "", true)]
+  function switchEditorTo(editorId, values) {
+      return map([...values], 
+          (currentParagraph) => {
+          if (currentParagraph.id === editorId){
+              setParagraph(currentParagraph.paragraph);
+              return createNewParagraph(currentParagraph.id, currentParagraph.paragraph, true, TEXT_TYPE);
+          } else {
+              return createNewParagraph(currentParagraph.id, currentParagraph.paragraph, false, TEXT_TYPE);
+          }
+      });
   }
+
   function handlePress(event) {
       if (event.key === 'Enter' && event.ctrlKey === true) {
         // not last
         if (selectedParagraph !== paragraphCount) {
           let selectNextId = selectedParagraph + 1;
-          let resultValues = updateParagraph(paragraphsList);
+          let resultValues = updateParagraph(paragraphsList, event.target.value);
           resultValues = switchEditorTo(selectNextId, resultValues);
           
           setParagraphList(resultValues);
-          setParagraph(resultValues[findIndex(resultValues, {id: selectNextId})].paragraph);
           setSelectedParagraph(selectNextId);
         } else {
           let newId = paragraphCount+1;
-          let resultValues = updateParagraph(paragraphsList);
+          let resultValues = updateParagraph(paragraphsList, event.target.value);
           resultValues = createNewEmptyParagraph(newId, resultValues);
           resultValues = switchEditorTo(newId, resultValues);
           
@@ -68,59 +77,21 @@ function ArticleEditor(props) {
       }
   }
 
-  function handlerHeaderChange(event) {
-    let text = event.target;
-    calculateTextareaSize(text);
-    setHeader(event.target.value)
-  }
-
-  function calculateTextareaSize(text) {
-    if ( !text )
-      return;
-    let maxHeight = 1000;
-
-    var adjustedHeight = text.clientHeight;
-    if ( !maxHeight || maxHeight > adjustedHeight )
-    {
-        adjustedHeight = Math.max(text.scrollHeight, adjustedHeight);
-        if ( maxHeight )
-          adjustedHeight = Math.min(maxHeight, adjustedHeight);
-        if ( adjustedHeight > text.clientHeight )
-          text.style.height = adjustedHeight + "px";
-    }
-  }
-
-  function handlerParagraphChange(event) {
-    calculateTextareaSize(event.target);
-    setParagraph(event.target.value)
-  }
-
   function handleClick(value) {
-    let resultValues = updateParagraph(paragraphsList);
+    let resultValues = updateParagraph(paragraphsList, paragraph);
     resultValues = switchEditorTo(value.id, resultValues);
     
     setParagraphList(resultValues);
-    setParagraph(value.paragraph);
     setSelectedParagraph(value.id);
-  }
-
-  function createNewParagraph(id, text, editor) {
-    return {
-      id: id,
-      paragraph: text,
-      editor: editor,
-      type: TEXT_TYPE
-    }
   }
 
   function handlerPostArticle() {
     let resultValues = updateParagraph(paragraphsList);
     setParagraphList(resultValues);
 
-    let result = paragraphsToText(resultValues);
-    console.info(result);
-    let back = textToParagraphs(result);
-    console.info(back);
+    let content = paragraphsToText(resultValues);
+    console.info(title + " - " + content);
+    dispatch(publishArticleAsync(user.authToken, title, content));
   }
 
   const paragraphsView = paragraphsList.map(
@@ -134,28 +105,24 @@ function ArticleEditor(props) {
   }
 
   function createEditor(value) {
+
     return (
-      <textarea
+      <FlexTextarea 
         key={value.id}
-        className={style.articleContentTextarea} 
-        value={paragraph}
-        onFocus={(event) => calculateTextareaSize(event.target)}
-        onChange={handlerParagraphChange}
-        onKeyPress={(event) => handlePress(event, value.id)}
-        autoFocus
-        rows="1"
-        placeholder="Type something..."></textarea>
+        value={value.paragraph}
+        style={style.articleContentTextarea}
+        onChangeText={(value, e) => setParagraph(value)}
+        onKeyPressEvent={handlePress}></FlexTextarea>
   )}
 
   return (
     <div className={style.articleEditor}>
-        <textarea 
-            className={style.articleHeaderTextarea} 
-            value={header} 
-            placeholder="Article's Title" 
-            wrap="hard"
-            rows="1"
-            onChange={handlerHeaderChange}></textarea>
+        <FlexTextarea
+          style={style.articleHeaderTextarea}
+          onChangeText={(titleValue, e) => setTitle(titleValue)}
+          value={title}
+          focused="true"
+          placeholder="Article's Title"></FlexTextarea>
         {paragraphsView}
         <button className={style.loginButton} onClick={handlerPostArticle}>POST</button>
     </div>

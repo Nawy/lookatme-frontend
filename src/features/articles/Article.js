@@ -2,11 +2,14 @@ import React from 'react';
 import styles from './Article.module.css';
 
 function Article({title, content}) {
+
+  const paragraphs = content.paragraphs.map((p) => <p>{p.paragraph}</p>);
+
   return (
     <div className={styles.article}>
         <h2>{title}</h2>
         <div>
-            <p>{content}</p>
+            {paragraphs}
             <p className={styles.barCode}>123456</p>
         </div>
     </div>
